@@ -188,3 +188,4 @@ def main():
 if __name__ == '__main__':
     main()
     # TODO: run on Google Colab? Also trying using Spark?
+    # TODO: clean up code and make repo public
