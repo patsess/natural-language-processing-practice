@@ -4,28 +4,22 @@ import numpy as np
 import pandas as pd
 
 
-# Combine and split the data into train and test
 def read_data(path):
-    # read dictionary into df
-    df_data_sentence = pd.read_table(
-        path + 'dictionary.txt', names=['Phrase|Index'])
-    df_data_sentence_processed = df_data_sentence['Phrase|Index'].str.split(
-        '|', expand=True)
-    df_data_sentence_processed = df_data_sentence_processed.rename(
-        columns={0: 'Phrase', 1: 'phrase_ids'})
+    phrase_df = pd.read_table(
+        path + 'dictionary.txt', names=['phrase|index'])
+    phrase_df = phrase_df['phrase|index'].str.split('|', expand=True)
+    phrase_df = phrase_df.rename(columns={0: 'phrase', 1: 'phrase_ids'})
 
-    # read sentiment labels into df
-    df_data_sentiment = pd.read_table(path + 'sentiment_labels.txt')
-    df_data_sentiment_processed = df_data_sentiment[
+    sentiment_df = pd.read_table(path + 'sentiment_labels.txt')
+    sentiment_df = sentiment_df[
         'phrase ids|sentiment values'].str.split('|', expand=True)
-    df_data_sentiment_processed = df_data_sentiment_processed.rename(
-        columns={0: 'phrase_ids', 1: 'sentiment_values'})
+    sentiment_df = sentiment_df.rename(
+        columns={0: 'phrase_id', 1: 'sentiment_value'})
 
-    # combine data frames containing sentence and sentiment
-    df_processed_all = df_data_sentence_processed.merge(
-        df_data_sentiment_processed, how='inner', on='phrase_ids')
+    combined_df = phrase_df.merge(
+        sentiment_df, how='inner', on='phrase_ids')
 
-    return df_processed_all
+    return combined_df
 
 
 def training_data_split(all_data, spitPercent, data_dir):
